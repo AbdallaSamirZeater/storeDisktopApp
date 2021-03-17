@@ -1,0 +1,769 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package hash_store1;
+
+import java.awt.event.KeyEvent;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+/**
+ *
+ * @author ab o da
+ */
+public class multipleReturn extends javax.swing.JFrame {
+
+    /**
+     * Creates new form multiplePurchases
+     */
+    DefaultTableModel salesTable;
+
+    public multipleReturn() {
+        initComponents();
+        Home.styleTable(new JTable[]{multiSalesTable});
+        translate();
+        salesTable = createTableCols(multiSalesTable, new String[]{"ID", "Item", "Price", "Quantity"});
+        branch();
+    }
+
+    String Names[][] = new String[][]{
+        {"ID :", ": الكود "},
+        {"Quantity :", ": الكمية "},
+        {"Add", "إضافة"},
+        {"Clear", "إعادة"},
+        {"Check ID :", ": رقم الشيك"},
+        {"Total :", ": التكلفة"},
+        {"Paid :", ": المدفوع"},
+        {"Rest :", ": الباقي"},
+        {"Client Name :", ": اسم العميل"},
+        {"User :", ": المستخدم"},
+        {"Date :", ": التاريخ"},
+        {"Branch :", ": الفرع"},
+        {"Check ID :", ": رقم الشيك"},
+        {"Dept", "دين"}
+
+    };
+
+    public void convertLang(JLabel[] lbl, int index) {
+        int sIndex;
+        if (index == 0) {
+            sIndex = 1;
+        } else {
+            sIndex = 0;
+        }
+
+        for (int i = 0; i < lbl.length; i++) {
+            for (int j = 0; j < Names.length; j++) {
+                if (lbl[i].getText().equals(Names[j][sIndex])) {
+                    lbl[i].setText(Names[j][index]);
+                    break;
+                }
+
+            }
+        }
+    }
+
+    private void translate() {
+        if (Home.lang_lbl.getText().equals("عربي")) {
+            convertLang(new JLabel[]{
+                branch_lbl, user_lbl, date_lbl, cName_lbl, total_lbl, paid_lbl, rest_lbl, dept_lbl00 , clear_lbl , add_lbl ,check_id
+            }, 0);
+
+        } else {
+            convertLang(new JLabel[]{
+                branch_lbl, user_lbl, date_lbl, cName_lbl, total_lbl, paid_lbl, rest_lbl, dept_lbl00 , clear_lbl , add_lbl ,check_id
+            }, 1);
+
+        }
+    }
+
+    public String formatNumber(String S) {
+        if (S.length() < 5) {
+            S = "000" + S;
+        } else if (S.length() < 6) {
+            S = "00" + S;
+        } else if (S.length() < 7) {
+            S = "0" + S;
+        }
+
+        return S;
+    }
+
+    void branch() {
+        DBcon d = new DBcon();
+        String sql2 = "SELECT * FROM `branch`";
+        multiSalesComboBox.removeAllItems();
+        try {
+            d.rs = d.st.executeQuery(sql2);
+            while (d.rs.next()) {
+                multiSalesComboBox.addItem(d.rs.getString("name"));
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "please try again   --  الرجاء المحاولة مرة أخري");
+
+        }
+    }
+
+    String getUser() {
+        String j = null;
+        int x = 0;
+        DBcon d = new DBcon();
+        String sql = "SELECT User_name FROM users WHERE logged = 1";
+        try {
+            d.rs = d.st.executeQuery(sql);
+            while (d.rs.next()) {
+                x++;
+
+            }
+            if (x != 0) {
+                d.rs = d.st.executeQuery(sql);
+                while (d.rs.next()) {
+                    j = d.rs.getString("User_name");
+                }
+            } else {
+                j = "Hash";
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return j;
+    }
+
+    int auto_insert(String s, String s2) {
+        int x = 0;
+        DBcon d = new DBcon();
+        String sql = "SELECT * FROM `" + s + "`";
+        try {
+            d.rs = d.st.executeQuery(sql);
+            while ((d.rs).next()) {
+
+                if ((d.rs.getInt(s2)) == x) {
+                    x++;
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "please try again   --  الرجاء المحاولة مرة أخري");
+        }
+        return x;
+    }
+
+    DefaultTableModel createTableCols(JTable table, String[] cols) {
+        DefaultTableModel dmodel;
+        dmodel = (DefaultTableModel) table.getModel();
+        for (int i = 0; i < cols.length; i++) {
+            dmodel.addColumn(cols[i]);
+        }
+        return dmodel;
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        multiSalesPanel = new javax.swing.JPanel();
+        salesPanel1 = new javax.swing.JPanel();
+        add_icon3 = new javax.swing.JLabel();
+        add_lbl = new javax.swing.JLabel();
+        clear_icon3 = new javax.swing.JLabel();
+        clear_lbl = new javax.swing.JLabel();
+        itemPanel4 = new javax.swing.JPanel();
+        total = new javax.swing.JTextField();
+        total_lbl = new javax.swing.JLabel();
+        allPaid = new javax.swing.JTextField();
+        paid_lbl = new javax.swing.JLabel();
+        rest_lbl = new javax.swing.JLabel();
+        allrest = new javax.swing.JTextField();
+        deptBox = new javax.swing.JCheckBox();
+        dept_lbl00 = new javax.swing.JLabel();
+        UserName = new javax.swing.JTextField();
+        user_lbl = new javax.swing.JLabel();
+        clientName = new javax.swing.JTextField();
+        cName_lbl = new javax.swing.JLabel();
+        date = new javax.swing.JTextField();
+        date_lbl = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        multiSalesTable = new javax.swing.JTable();
+        multiSalesComboBox = new javax.swing.JComboBox<>();
+        branch_lbl = new javax.swing.JLabel();
+        print_lbl = new javax.swing.JLabel();
+        ID = new javax.swing.JTextField();
+        check_id = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setSize(new java.awt.Dimension(1194, 740));
+
+        multiSalesPanel.setBackground(new java.awt.Color(113, 128, 147));
+        multiSalesPanel.setPreferredSize(new java.awt.Dimension(1194, 800));
+        multiSalesPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        salesPanel1.setBackground(new java.awt.Color(113, 128, 147));
+        salesPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        add_icon3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addD.png"))); // NOI18N
+        add_icon3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                add_icon3MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                add_icon3MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                add_icon3MouseExited(evt);
+            }
+        });
+        salesPanel1.add(add_icon3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 390, 50, 60));
+
+        add_lbl.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        add_lbl.setForeground(new java.awt.Color(30, 34, 43));
+        add_lbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        add_lbl.setText("Add");
+        salesPanel1.add(add_lbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 450, 60, 30));
+
+        clear_icon3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/clearD.png"))); // NOI18N
+        clear_icon3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                clear_icon3MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                clear_icon3MouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                clear_icon3MouseExited(evt);
+            }
+        });
+        salesPanel1.add(clear_icon3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 390, 50, 60));
+
+        clear_lbl.setFont(new java.awt.Font("Segoe UI Semibold", 0, 18)); // NOI18N
+        clear_lbl.setForeground(new java.awt.Color(30, 34, 43));
+        clear_lbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        clear_lbl.setText("Clear");
+        salesPanel1.add(clear_lbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 450, 70, 30));
+
+        itemPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        total.setFont(new java.awt.Font("Segoe UI Semibold", 0, 20)); // NOI18N
+        total.setForeground(new java.awt.Color(255, 51, 51));
+        total.setEnabled(false);
+        itemPanel4.add(total, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, 310, 50));
+
+        total_lbl.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        total_lbl.setText("Total :");
+        itemPanel4.add(total_lbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, -1, 50));
+
+        allPaid.setFont(new java.awt.Font("Segoe UI Semibold", 0, 20)); // NOI18N
+        allPaid.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                allPaidFocusGained(evt);
+            }
+        });
+        itemPanel4.add(allPaid, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 80, 310, 50));
+
+        paid_lbl.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        paid_lbl.setText("Paid :");
+        itemPanel4.add(paid_lbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, -1, 50));
+
+        rest_lbl.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        rest_lbl.setText("Rest :");
+        itemPanel4.add(rest_lbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, -1, 50));
+
+        allrest.setFont(new java.awt.Font("Segoe UI Semibold", 0, 20)); // NOI18N
+        allrest.setForeground(new java.awt.Color(255, 51, 51));
+        allrest.setEnabled(false);
+        itemPanel4.add(allrest, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 140, 250, 50));
+        itemPanel4.add(deptBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 155, -1, 20));
+
+        dept_lbl00.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        dept_lbl00.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        dept_lbl00.setText("Dept");
+        itemPanel4.add(dept_lbl00, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 140, 50, 50));
+
+        salesPanel1.add(itemPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 530, 230));
+
+        multiSalesPanel.add(salesPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 530, 550));
+
+        UserName.setEditable(false);
+        UserName.setFont(new java.awt.Font("Segoe UI Semibold", 0, 20)); // NOI18N
+        UserName.setText(getUser());
+        UserName.setEnabled(false);
+        multiSalesPanel.add(UserName, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, 320, 50));
+
+        user_lbl.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        user_lbl.setForeground(new java.awt.Color(255, 255, 255));
+        user_lbl.setText("User :");
+        multiSalesPanel.add(user_lbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 90, 50));
+
+        clientName.setFont(new java.awt.Font("Segoe UI Semibold", 0, 20)); // NOI18N
+        clientName.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                clientNameCaretUpdate(evt);
+            }
+        });
+        multiSalesPanel.add(clientName, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 80, 350, 50));
+
+        cName_lbl.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        cName_lbl.setForeground(new java.awt.Color(255, 255, 255));
+        cName_lbl.setText("Client Name :");
+        multiSalesPanel.add(cName_lbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 80, 120, 50));
+
+        date.setEditable(false);
+        date.setFont(new java.awt.Font("Segoe UI Semibold", 0, 20)); // NOI18N
+        date.setForeground(new java.awt.Color(255, 51, 51));
+        date.setText(String.valueOf(LocalDate.now()));
+        date.setEnabled(false);
+        date.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dateActionPerformed(evt);
+            }
+        });
+        multiSalesPanel.add(date, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 20, 350, 50));
+
+        date_lbl.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        date_lbl.setForeground(new java.awt.Color(255, 255, 255));
+        date_lbl.setText("Date :");
+        multiSalesPanel.add(date_lbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 20, 90, 50));
+
+        jScrollPane3.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane3.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        multiSalesTable.setAutoCreateRowSorter(true);
+        multiSalesTable.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        multiSalesTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        multiSalesTable.setGridColor(new java.awt.Color(153, 153, 153));
+        multiSalesTable.setIntercellSpacing(new java.awt.Dimension(0, 0));
+        multiSalesTable.setRowHeight(45);
+        multiSalesTable.setShowHorizontalLines(true);
+        multiSalesTable.setShowVerticalLines(false);
+        multiSalesTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                multiSalesTableKeyPressed(evt);
+            }
+        });
+        jScrollPane3.setViewportView(multiSalesTable);
+
+        multiSalesPanel.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 150, 634, 550));
+
+        multiSalesComboBox.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        multiSalesComboBox.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        multiSalesComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                multiSalesComboBoxActionPerformed(evt);
+            }
+        });
+        multiSalesPanel.add(multiSalesComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 20, 160, 50));
+
+        branch_lbl.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        branch_lbl.setForeground(new java.awt.Color(255, 255, 255));
+        branch_lbl.setText("Branch :");
+        multiSalesPanel.add(branch_lbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 90, 50));
+
+        print_lbl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/print.png"))); // NOI18N
+        print_lbl.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                print_lblMouseClicked(evt);
+            }
+        });
+        multiSalesPanel.add(print_lbl, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, -1, -1));
+
+        ID.setFont(new java.awt.Font("Segoe UI Semibold", 0, 20)); // NOI18N
+        ID.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                IDKeyPressed(evt);
+            }
+        });
+        multiSalesPanel.add(ID, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 80, 270, 50));
+
+        check_id.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        check_id.setForeground(new java.awt.Color(255, 255, 255));
+        check_id.setText("Check ID :");
+        multiSalesPanel.add(check_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 120, 50));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1194, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(multiSalesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 1194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 800, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(multiSalesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void clientNameCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_clientNameCaretUpdate
+
+    }//GEN-LAST:event_clientNameCaretUpdate
+
+    private void dateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dateActionPerformed
+
+    private void add_icon3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_add_icon3MouseClicked
+        add_icon3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/add2.png")));
+        String item = null, client_name = "unknown", mobile = "unknown";
+        long stock_id = 0;
+        int stockQuant = 0, flag = 0, clientId = 0, quant = 0, check_id = 0, counter = 0;
+        float salesprice, dept = 0, rest = 0, total = 0, price = 0, paid = 0, allTotal = 0, allRest = 0, allPaid = 0, oldDept = 0;
+        client_name = clientName.getText();
+        String branch = String.valueOf(multiSalesComboBox.getSelectedItem());
+        check_id = Integer.valueOf(ID.getText());
+        DBcon d = new DBcon();
+        DBcon db = new DBcon();
+        try {
+            d.st = d.con.createStatement();
+            d.st.executeUpdate("delete from sales where check_id = '" + check_id + "';");
+
+            d.rs = d.st.executeQuery("SELECT * FROM `multisales` WHERE `ID`='" + check_id + "';");
+            while (d.rs.next()) {
+                //stock_id = d.rs.getLong("ID");
+                item = d.rs.getString("Item");
+                quant = d.rs.getInt("Quant");
+                price = d.rs.getFloat("Price");
+                String sql1 = "SELECT * FROM `stock`,branch WHERE branch.id = stock.branch  AND stock.Name='" + item + "' AND branch.name = '" + branch + "';";
+                db.rs = db.st.executeQuery(sql1);
+                while (db.rs.next()) {
+                    stockQuant = db.rs.getInt("Quantity");
+                }
+                String ss = "UPDATE `stock` SET `Quantity`= '" + (stockQuant + quant) + "' WHERE stock.`Name` = '" + item + "';";
+                d.st = d.con.createStatement();
+                d.st.executeUpdate(ss);
+            }
+            d.st = d.con.createStatement();
+            d.st.executeUpdate("delete from multisales where id = '" + check_id + "';");
+            allRest = Float.valueOf(this.total.getText()) - Float.valueOf(this.allPaid.getText());
+            this.allrest.setText(String.valueOf(allRest));
+            d.rs = d.st.executeQuery("SELECT * FROM `clients` WHERE `clients`.`Name`='" + client_name + "';");
+            while (d.rs.next()) {
+                clientId = d.rs.getInt("ID");
+                oldDept = d.rs.getFloat("dept");
+            }
+            d.st = d.con.createStatement();
+            d.st.executeUpdate("Update `clients` SET `dept`= " + (oldDept - allRest) + "WHERE ID = " + clientId + ";");
+//........................................................................................
+            for (int i = 0; i < salesTable.getRowCount(); i++) {
+                counter++;
+                stock_id = Long.parseLong(String.valueOf(multiSalesTable.getModel().getValueAt(i, 0)));
+                item = String.valueOf(multiSalesTable.getModel().getValueAt(i, 1));
+                price = Float.parseFloat(String.valueOf(multiSalesTable.getModel().getValueAt(i, 2)));
+                quant = Integer.parseInt(String.valueOf(multiSalesTable.getModel().getValueAt(i, 3)));
+                total = price * quant;
+                allTotal += total;
+                String sql1 = "SELECT * FROM `stock`,branch WHERE branch.id = stock.branch  AND stock.Name='" + item + "' AND branch.name = '" + branch + "';";
+                d.rs = d.st.executeQuery(sql1);
+                (d.rs).last();
+                stockQuant = d.rs.getInt("Quantity");
+                if (stockQuant >= quant) {
+                    String sql2 = "INSERT INTO `multisales` (`ID`, `Item`, `Quant`, `Price`) VALUES ('" + check_id + "','" + item + "', '" + quant + "', '" + price + "');";
+                    d.st = d.con.createStatement();
+                    d.st.executeUpdate(sql2);
+                    String ss = "UPDATE `stock` SET `Quantity`= '" + (stockQuant - quant) + "' WHERE stock.`Name` = '" + item + "';";
+                    d.st = d.con.createStatement();
+                    d.st.executeUpdate(ss);
+                } else {
+                    JOptionPane.showMessageDialog(null, item + "Quantity not enough .... كمية غير كافية");
+                    flag = flag / 0;
+                }
+            }
+            allPaid = Float.valueOf(this.allPaid.getText());
+            allRest = allTotal - allPaid;
+            allrest.setText(String.valueOf(allRest));
+            if (deptBox.isSelected() == false) {
+                allRest = 0;
+            }
+            String sql2 = "INSERT INTO `sales` (`check_id`, `Total`, `Paid`, `client_id`, `stock_id`, `quantity`, `Rest`,`date`,`user`) VALUES (' " + check_id + " ', '" + allTotal + "', '" + allPaid + "', '" + clientId + "', '" + -1 + "', '" + counter + "', '" + allRest + "', '" + LocalDate.now() + "' , '" + getUser() + "');";
+            d.st = d.con.createStatement();
+            d.st.executeUpdate(sql2);
+            d.st = d.con.createStatement();
+            d.st.executeUpdate("Update `clients` SET `dept`= " + (oldDept + allRest) + "WHERE ID = " + clientId + ";");
+            this.total.setText(String.valueOf(allTotal));
+            this.allPaid.setText(String.valueOf(allPaid));
+            ID.setText(String.valueOf(check_id));
+            JOptionPane.showMessageDialog(null, "Done   --  تم");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "please try again   --  الرجاء المحاولة مرة أخري");
+        }
+    }//GEN-LAST:event_add_icon3MouseClicked
+
+    private void add_icon3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_add_icon3MouseEntered
+        add_icon3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addG.png")));
+    }//GEN-LAST:event_add_icon3MouseEntered
+
+    private void add_icon3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_add_icon3MouseExited
+        add_icon3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/addD.png")));
+    }//GEN-LAST:event_add_icon3MouseExited
+
+    private void clear_icon3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clear_icon3MouseClicked
+        clear_icon3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/clear2.png")));
+        clientName.setText(null);
+        total.setText(null);
+        allPaid.setText(null);
+        allrest.setText(null);
+        ID.setText(null);
+        deptBox.setSelected(false);
+        if (salesTable.getRowCount() != 0) {
+            for (int i = salesTable.getRowCount() - 1; i >= 0; i--) {
+                salesTable.removeRow(i);
+            }
+        }
+    }//GEN-LAST:event_clear_icon3MouseClicked
+
+    private void clear_icon3MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clear_icon3MouseEntered
+        clear_icon3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/clearG.png")));
+    }//GEN-LAST:event_clear_icon3MouseEntered
+
+    private void clear_icon3MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clear_icon3MouseExited
+        clear_icon3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/clearD.png")));
+    }//GEN-LAST:event_clear_icon3MouseExited
+
+    private void multiSalesTableKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_multiSalesTableKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
+            int n = multiSalesTable.getSelectedRow();
+            salesTable.removeRow(n);
+  }    }//GEN-LAST:event_multiSalesTableKeyPressed
+
+    private void multiSalesComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_multiSalesComboBoxActionPerformed
+
+    }//GEN-LAST:event_multiSalesComboBoxActionPerformed
+
+    private void print_lblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_print_lblMouseClicked
+        JOptionPane.showMessageDialog(null, "Printing ... please wait -- سيتم الطباعة الآن");
+
+        // sales
+        ArrayList<PrintableLine> arr = new ArrayList<PrintableLine>(40);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();  //2016/11/16 12:08:43
+        String s1, s2;
+        float p = 0;
+        int q = 0;
+        PrintableLine line;
+        try {
+            line = new PrintableLine("ـــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ");
+            arr.add(line);
+            line = new PrintableLine(Home.reciept_header1);
+            arr.add(line);
+            line = new PrintableLine(Home.reciept_header2);
+            arr.add(line);
+            line = new PrintableLine(Home.reciept_header3);
+            arr.add(line);
+
+            line = new PrintableLine("ـــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ");
+                arr.add(line);
+                s1 = "رقم الشيك               " + Home.user_lbl.getText();
+
+                if (Home.userNameLang.equals("E")) {
+                    s1 = Home.user_lbl.getText() + "              رقم الشيك";
+                }
+
+                line = new PrintableLine("الوقت ", s1);
+                arr.add(line);
+            s1 = String.valueOf(dtf.format(now));
+            s2 = String.format("%12d", Integer.parseInt(ID.getText()));
+            line = new PrintableLine(s1, s2);
+            arr.add(line);
+            line = new PrintableLine("ـــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ");
+            arr.add(line);
+            line = new PrintableLine(" الكمية           السعر          القيمة   ", "اسم الصنف     ");
+            arr.add(line);
+            line = new PrintableLine("ـــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ");
+            arr.add(line);
+            for (int i = 0; i < salesTable.getRowCount(); i++) {
+                q = Integer.parseInt(String.valueOf(multiSalesTable.getModel().getValueAt(i, 3)));
+                p = Float.parseFloat(String.valueOf(multiSalesTable.getModel().getValueAt(i, 2)));
+
+                s1 = formatNumber(String.format("%03.2f", q * p)) + "    " + formatNumber(String.format("%03.2f", p)) + "      " + String.format("%4d", q);
+                s2 = String.valueOf(multiSalesTable.getModel().getValueAt(i, 1));
+                line = new PrintableLine(s1, s2);
+                arr.add(line);
+            }
+            //line = new PrintableLine("300.25   100.01    0008", "1234كشري   ");
+            line = new PrintableLine(" ");
+            arr.add(line);
+            line = new PrintableLine(" ");
+            arr.add(line);
+
+            s1 = formatNumber(String.format("%3.2f", Float.parseFloat(total.getText())));
+            line = new PrintableLine(s1, "التكلفة الكلية   ");
+            arr.add(line);
+            s1 = formatNumber(String.format("%3.2f", Float.parseFloat(allPaid.getText())));
+            line = new PrintableLine(s1, "المدفوع   ");
+            arr.add(line);
+            s1 = String.format("%3.2f", Float.parseFloat(allrest.getText()));
+            line = new PrintableLine(s1, "المتبقي   ");
+            arr.add(line);
+            line = new PrintableLine("----------------------------------------------------------");
+            arr.add(line);
+            line = new PrintableLine(Home.reciept_footer1);
+            arr.add(line);
+            line = new PrintableLine("----------------------------------------------------------");
+            arr.add(line);
+            line = new PrintableLine(Home.reciept_footer2);
+            arr.add(line);
+            PrintReceipt pr = new PrintReceipt(arr);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "please try again   --  الرجاء المحاولة مرة أخري");
+        }
+
+    }//GEN-LAST:event_print_lblMouseClicked
+
+    private void allPaidFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_allPaidFocusGained
+        float price = 0;
+        for (int i = 0; i < salesTable.getRowCount(); i++) {
+            price += Float.parseFloat(String.valueOf(multiSalesTable.getModel().getValueAt(i, 3))) * Float.parseFloat(String.valueOf(multiSalesTable.getModel().getValueAt(i, 2)));
+        }
+        total.setText(String.valueOf(price));
+    }//GEN-LAST:event_allPaidFocusGained
+
+    private void IDKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_IDKeyPressed
+        //  TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            String quant1 = null, price = null, total = null, paid = null, rest = null, client_name = null;
+            int id1;
+            String sql3 = null;
+            DBcon d = new DBcon();
+            id1 = Integer.parseInt(ID.getText());
+            String sql = "SELECT * FROM `sales`,clients WHERE sales.client_id = clients.ID AND check_id = " + id1 + ";";
+            try {
+                String item = null;
+                d.rs = d.st.executeQuery(sql);
+                int temp;
+                while (d.rs.next()) {
+                    total = String.valueOf(d.rs.getFloat("total"));
+                    paid = String.valueOf(d.rs.getFloat("paid"));
+                    rest = String.valueOf(d.rs.getFloat("rest"));
+                    client_name = d.rs.getString("clients.Name");
+                }
+                this.total.setText(total);
+                this.allPaid.setText(paid);
+                this.allrest.setText(rest);
+                clientName.setText(client_name);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "please try again   --  الرجاء المحاولة مرة أخري");
+            }
+
+            String sql2 = "SELECT * FROM `multisales` WHERE ID = " + id1 + ";";
+            try {
+                String item = null;
+                d.rs = d.st.executeQuery(sql2);
+                int temp;
+                while (d.rs.next()) {
+                    quant1 = String.valueOf(d.rs.getInt("Quant"));
+                    item = d.rs.getString("Item");
+                    price = String.valueOf(d.rs.getFloat("Price"));
+                    String[] rowData = {String.valueOf(id1), item, price, quant1};
+                    salesTable.addRow(rowData);
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "please try again   --  الرجاء المحاولة مرة أخري");
+            }
+        }
+    }//GEN-LAST:event_IDKeyPressed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(multipleReturn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(multipleReturn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(multipleReturn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(multipleReturn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new multipleReturn().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField ID;
+    private javax.swing.JTextField UserName;
+    private javax.swing.JLabel add_icon3;
+    private javax.swing.JLabel add_lbl;
+    private javax.swing.JTextField allPaid;
+    private javax.swing.JTextField allrest;
+    private javax.swing.JLabel branch_lbl;
+    private javax.swing.JLabel cName_lbl;
+    private javax.swing.JLabel check_id;
+    private javax.swing.JLabel clear_icon3;
+    private javax.swing.JLabel clear_lbl;
+    private javax.swing.JTextField clientName;
+    private javax.swing.JTextField date;
+    private javax.swing.JLabel date_lbl;
+    private javax.swing.JCheckBox deptBox;
+    private javax.swing.JLabel dept_lbl00;
+    private javax.swing.JPanel itemPanel4;
+    private javax.swing.JScrollPane jScrollPane3;
+    public javax.swing.JComboBox<String> multiSalesComboBox;
+    private javax.swing.JPanel multiSalesPanel;
+    private javax.swing.JTable multiSalesTable;
+    private javax.swing.JLabel paid_lbl;
+    private javax.swing.JLabel print_lbl;
+    private javax.swing.JLabel rest_lbl;
+    private javax.swing.JPanel salesPanel1;
+    private javax.swing.JTextField total;
+    private javax.swing.JLabel total_lbl;
+    private javax.swing.JLabel user_lbl;
+    // End of variables declaration//GEN-END:variables
+
+}
